@@ -1,0 +1,42 @@
+//https://programmers.co.kr/learn/courses/30/lessons/72410
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+
+string solution(string new_id) {
+    string answer = "";
+    for (int i = 0; i < new_id.length(); i++) {
+        if (new_id[i] >= 'A' && new_id[i] <= 'Z')
+            new_id[i] = new_id[i] + 32;
+        if (new_id[i] == '-' || new_id[i] == '_' || new_id[i] == '.'
+            || (new_id[i] >= 'a' && new_id[i] <= 'z') || (new_id[i] >= '0' && new_id[i] <= '9')) {
+            if(answer.length() > 0) if (answer.back() == '.' && new_id[i] == '.')
+                continue;
+            answer += new_id[i];
+        }
+    }
+    if (answer[0] == '.')
+        answer.erase(0, 1);
+    if (answer.back() == '.')
+        answer.pop_back();
+    if (answer == "")
+        answer = "a";
+
+    if (answer.length() >= 16)
+        answer = answer.substr(0,15);
+    if (answer.back() == '.')
+        answer.pop_back();
+
+    while (answer.length() <= 2)
+        answer += answer.back();
+    return answer;
+}
+
+int main(void) {
+    string input = "...!@BaT#*..y.abcdefghijklm";
+    cout << solution(input) << endl;
+}
