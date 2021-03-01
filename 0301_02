@@ -1,0 +1,46 @@
+//https://leetcode.com/problems/permutation-sequence/submissions/
+
+class Solution {
+public:
+    int index;
+    string answer;
+    
+    unsigned int factorial(unsigned int n) 
+    {
+        if (n == 0)
+            return 1;
+        return n * factorial(n - 1);
+    }
+    
+    void permute(string in, string left, int min, int max){
+        if (index < min || index > max) return;
+        if(left.empty()){
+            for(char & num : in)
+                cout << num;
+            cout << endl;
+            answer = in;
+            return;
+        }
+        int unit = (max - min + 1)/left.size();
+        max = min + unit - 1;
+        for (int i = 0; i < left.size(); i++) {
+            string new_set = in+left[i];
+            
+            string new_left_num = left;
+            new_left_num.erase(i, 1);
+            
+            permute(new_set, new_left_num, min, max); 
+            min += unit;
+            max += unit;
+        }
+        return;        
+    }
+    string getPermutation(int n, int k) {
+        index = k;
+        string input = "";
+        for(int i=0; i<n; i++)
+            input += '1'+i;
+        permute("", input, 1, factorial(n));
+        return answer;
+    }
+};
