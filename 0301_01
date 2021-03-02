@@ -3,12 +3,34 @@
 class Solution {
 public:
     vector<vector<int>> all_set;
+    int input_size;
+    
+    bool checker(vector<int> position, int input){
+        
+        vector<int> left_up_diff;
+        vector<int> right_up_diff;
+        int input_left_up = input - position.size();
+        int input_right_up = input - (input_size - 1 - position.size());
+        for(int i=0; i<position.size(); i++){
+            if(input_left_up == position[i] - i)
+                return false;
+            if(input_right_up == (position[i] - (input_size-1-i)))
+                return false;
+        }
+                
+        return true;
+        
+    }
+    
     void set_maker(vector<int> set, vector<int> left_num){
         if(left_num.empty()){
             all_set.push_back(set);
             return;
         }
+        
         for (int i = 0; i < left_num.size(); i++) {
+            if(!checker(set, left_num[i]))
+                continue;
             vector<int> new_set = set;
             new_set.push_back(left_num[i]);
             
@@ -19,38 +41,14 @@ public:
         }
         return;
     }
-    bool checker(vector<int> position, int n){
-        vector<int> unique;
-        for (int i = 0; i < n; i++){
-            if(unique.empty()){
-                unique.push_back(position[i]);
-                //cout << position[i] << ' ';
-                continue;
-            }
-            vector<int>::iterator iter;
-            iter = find(unique.begin(), unique.end(), position[i]);
-            if(iter == unique.end()){
-                unique.push_back(position[i]);
-                //cout << position[i] << ' ';
-            }
-            else{
-                
-                //cout << "false" << endl << endl;
-                return false;
-            }
-        }
-        return true;
-    }
+    
     vector<vector<string>> solveNQueens(int n) {
         vector<vector<string>> map;
-        vector<int> position(n,0);
-        vector<int> left_up_diff(n,0);
-        vector<int> right_up_diff(n,0);
+        vector<int> position;
+        input_size = n;
         for (int i = 0; i < n; i++)
         {
-            position[i] = i;
-            left_up_diff[i] = 0;
-            right_up_diff[i] = i - (n-1-i);
+            position.push_back(i);
         }
         vector<int> set;
         set_maker(set, position);
@@ -59,21 +57,6 @@ public:
         for(auto & single_set : all_set){
                 
             
-                
-            for(int i=0; i<n; i++){
-                left_up_diff[i] = single_set[i] - i;
-                right_up_diff[i] = single_set[i] - (n-1-i);
-            }
-                
-            /*for(int a=0; a<n; a++) cout << single_set[a] << ' ';
-            cout << endl;
-            for(int a=0; a<n; a++) cout << left_up_diff[a] << ' ';
-            cout << endl;
-            for(int a=0; a<n; a++) cout << right_up_diff[a] << ' ';
-            cout << endl;
-            cout << endl;*/
-            if (!checker(left_up_diff,n)) continue;
-            if (!checker(right_up_diff,n)) continue;
             vector<string> success;
             for(int k = 0; k < n; k++){
                 string line(n, '.'); 
